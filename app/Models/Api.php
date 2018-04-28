@@ -20,11 +20,31 @@ class Api
 
     		 return $content['top-headlines']  
 
-    	} catch (Exception $e) {
+    	} catch (RequestException $e) {
 			 echo Psr7\str($e->getRequest());
 		          if ($e->hasResponse()) {
 		            echo Psr7\str($e->getResponse());
 	          }
     	}
+
+        public function getAllSources()
+        {
+            try {
+
+                $client        = new GuzzleHttpClient();
+
+                $apiRequest       = $client->request('GET', 'https://newsapi.org/v2/everything?country=id&apiKey=55ac21787f75465baa09b675268c6e73' );
+
+                $content          = json_decode($apiRequest->getBody()->getContents(), true);
+
+                   return $content['sources'];
+                
+            } catch (RequestException $e) {
+            echo Psr7\str($e->getRequest());
+               if ($e->hasResponse()) {
+                    echo Psr7\str($e->getResponse());
+                }
+            }
+        }
     }
 }
